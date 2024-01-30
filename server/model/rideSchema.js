@@ -4,7 +4,7 @@ const rideSchema = new mongoose.Schema({
   //   type: Number,
   //   required: true,
   // },
-  PublisherID: {
+  UID: {
     type: String,
     required: false,
   },
@@ -16,7 +16,7 @@ const rideSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  no_of_pass: {
+  nop: {
     type: String,
     required: true,
   },

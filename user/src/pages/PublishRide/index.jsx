@@ -63,11 +63,12 @@ export default function PublishRide() {
     event.preventDefault();
     try {
       let dat = await axios.post(`http://localhost:8000/user/${UID}/rides`, {
-        from_location: from,
-        to_location: to,
-        passenger_count: nop,
-        doj: doj,
-        price: price,
+        UID,
+        from,
+        to,
+        nop,
+        doj,
+        price,
       });
       if (dat.status === 200) {
         setmsg('Ride Successfully placed');

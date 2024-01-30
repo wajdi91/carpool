@@ -60,12 +60,12 @@ router.post("/user/login", async (req, res) => {
 });
 router.post("/user/:UID/rides", async (req, res) => {
   console.log(req.body);
-  const {from, to, no_of_pass, doj, price } = req.body;
+  const {UID,from,to,nop,doj,price} = req.body;
   try {
     const ride = new Ride({  
-      from,
+      UID,from,
       to,
-      no_of_pass,
+      nop,
       doj,
       price,
     });
