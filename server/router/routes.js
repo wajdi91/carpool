@@ -76,25 +76,71 @@ router.post("/user/:UID/rides", async (req, res) => {
     console.log(error,"wajd");
   }
 });
-router.get("/rides/all", async (req, res) => {
+router.get('/user/:UID/rides', async (req, res) => {
+  const { UID } = req.params;
+
   try {
-    const allRides = await Ride.find();
-    res.status(200).json(allRides);
-  } catch (e) {
-    console.log(e);
+    // Assuming the field name in your MongoDB schema is 'UID'
+    const rides = await Ride.find({ UID: UID });
+
+    if (!rides || rides.length === 0) {
+      return res.status(404).json({ message: 'No rides found for the specified UID' });
+    }
+
+    res.status(200).json(rides);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
   }
 });
-
-router.get("/ridesto/:TO", async (req, res) => {
-  const to = req.params.TO.toUpperCase();
-  console.log("GETTING RIDES TO " + to);
+router.get("/rides/all", async (req, res) => {
   try {
-    const availableRides = await Ride.find({ to });
+    const availableRides = await Ride.find();
     console.log(availableRides);
     res.send(JSON.stringify(availableRides));
   } catch (error) {
-    console.log("Error Occured");
-    console.log(err);
+    console.log("Error Occurred");
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+router.get('/rides/:rideId', async (req, res) => {
+  const { rideId } = req.params;
+
+  try {
+    const ride = await Ride.findById(rideId);
+
+    if (!ride) {
+      return res.status(404).json({ message: 'Ride not found' });
+    }
+
+    res.status(200).json(ride);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+router.get("/ridesto/:TO", async (req, res) => {
+  const to = req.params.TO.toUpperCase();
+  console.log("GETTING RIDES TO " + to);
+
+  try {
+    let query = { to };
+
+    // Check if date parameters are provided
+    if (toDate && fromDate) {
+      // Assuming your date field is named "date"
+      query.date = { $gte: new Date(fromDate), $lte: new Date(toDate) };
+    }
+
+    const availableRides = await Ride.find(query);
+
+    console.log(availableRides);
+    res.send(JSON.stringify(availableRides));
+  } catch (error) {
+    console.log("Error Occurred");
+    console.log(error);
+    res.status(500).send("Internal Server Error");
   }
 });
 //fix this ->
@@ -103,7 +149,6 @@ router.get("/rides/:FROM/:TO", async (req, res) => {
   const from = req.params.FROM.toUpperCase();
   console.log("FROM - " + from);
   console.log("TO - " + to);
-  console.log("PRICE - " + maxp);
   try {
     const availableRides = await Ride.find({
       $and: [{ from: from }, { to: to }],
@@ -117,14 +162,20 @@ router.get("/rides/:FROM/:TO", async (req, res) => {
   }
 });
 
-router.get("/rides/:FROM/:TO/:MAXP", async (req, res) => {
+router.get("/ridesto/:TO/:FROM/:MAXP", async (req, res) => {
+  // Extract parameters from the request
   const to = req.params.TO.toUpperCase();
   const from = req.params.FROM.toUpperCase();
-  const maxp = req.params.MAXP; //maximum payable price
+  const maxp = req.params.MAXP;
+  const doj = req.query.doj; // Extract the 'doj' parameter from the query string
+
   console.log("FROM - " + from);
   console.log("TO - " + to);
   console.log("PRICE - " + maxp);
+  console.log("DOJ - " + doj);
+
   try {
+    // Your logic to fetch rides based on parameters
     const availableRides = await Ride.find({
       $and: [{ from: from }, { to: to }, { price: { $gte: 0, $lte: maxp } }],
     });
@@ -132,10 +183,13 @@ router.get("/rides/:FROM/:TO/:MAXP", async (req, res) => {
     console.log(availableRides);
     res.send(JSON.stringify(availableRides));
   } catch (error) {
-    console.log("Error Occured");
-    console.log(err);
+    console.log("Error Occurred");
+    console.log(error);
+    res.status(500).send("Internal Server Error");
   }
 });
+
+
 // router.get("/user/show/:UID", async (req, res) => {
 //   const UID = req.params.UID;
 //   console.log(UID);

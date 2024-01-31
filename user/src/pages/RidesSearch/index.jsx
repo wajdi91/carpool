@@ -1,7 +1,8 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from '../../components/User/Navbar';
 import RideCard from '../../components/User/RideCard';
+import MyRide from '../../components/User/MyRide';
 import LoadingCard from '../../components/layouts/LoadingCard';
 import {
   ChakraProvider,
@@ -19,46 +20,62 @@ import {
 } from '@chakra-ui/react';
 const RidesSearch = () => {
   const [allRides, setAllRides] = useState([]);
-
   const [from, setFrom] = useState('');
   const [to, setTo] = useState('');
   const [doj, setDoj] = useState('');
   const [price, setPrice] = useState('');
-  const [msg, setmsg] = useState('Please fill the following details');
+  const [msg, setMsg] = useState('Please fill the following details');
   const [loading, setLoad] = useState(false);
 
   const handleFromChange = e => setFrom(e.target.value);
   const handleToChange = e => setTo(e.target.value);
   const handleDojChange = e => setDoj(e.target.value);
   const handlePriceChange = e => setPrice(e.target.value);
-  const handleSubmit = async event => {
-    event.preventDefault();
-    try {
-      setLoad(true);
-      let dat = await axios.get(`http://localhost:8000/rides/`, {
-        params: {
-          from_location: from,
-          to_location: to,
-          doj: doj,
-          price: price,
-        },
-      });
-      setAllRides(dat.data);
-      if (dat.status === 200) {
-        setLoad(false);
-        setmsg('Scroll to view rides');
-      } else {
-        setmsg("Couldn't find rides");
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const fetchData = async () => {
+      try {
+        setLoad(true);
+        const response = await axios.get(`http://localhost:8000/rides/all`);
+
+        if (isMounted) {
+          // Assuming 'doj' is a date string in ISO format (e.g., '2022-02-28T00:00:00.000Z')
+          const currentDate = new Date();
+
+          // Filter rides based on expiration status
+          const filteredRides = response.data.filter(ride => {
+            const rideDate = new Date(ride.doj);
+            return rideDate >= currentDate; // Adjust the condition based on your logic
+          });
+
+          setAllRides(filteredRides);
+
+          if (response.status === 200) {
+            setLoad(false);
+            setMsg('Scroll to view rides');
+          } else {
+            setMsg("Couldn't find rides");
+          }
+        }
+      } catch (err) {
+        console.log(err);
       }
-    } catch (err) {
-      console.log(err);
-    }
-  };
+    };
+
+    fetchData();
+
+    return () => {
+      // Set isMounted to false when the component is unmounted
+      isMounted = false;
+    };
+  }, []);
 
   return (
     <ChakraProvider theme={theme}>
       <Navbar />
-      <Stack spacing={8} mx={'auto'} maxW={'lg'} py={2} px={6}>
+      {/* <Stack spacing={8} mx={'auto'} maxW={'lg'} py={2} px={6}>
         <Stack align={'center'}>
           <Heading fontSize={'4xl'}> Search Rides</Heading>
           <Text fontSize={'lg'} color={'gray.600'}>
@@ -130,25 +147,31 @@ const RidesSearch = () => {
             <Stack spacing={10}></Stack>
           </Stack>
         </Box>
-      </Stack>
+      </Stack> */}
       <Box align={'center'}>
+        <Text fontWeight={'bold'} fontSize="38px" my="4rem" mx="5rem">
+          ALL Rides
+        </Text>
+
         {loading === true ? <LoadingCard /> : null}
-        {allRides.map(res =>
-          res.publisher_id !== parseInt(localStorage.getItem('UID')) ? (
-            <RideCard
-              key={res.id}
-              uid={parseInt(localStorage.getItem('UID'))}
-              to={res.to_location}
-              from={res.from_location}
-              doj={res.doj}
-              nop={res.passenger_count}
-              price={res.price}
-              rideID={res.id}
-              pid={res.publisher_id}
-              publisher={res.publisher}
+
+        {Array.isArray(allRides) && allRides.length > 0 ? (
+          allRides.map((ride, index) => (
+            <MyRide
+              key={index}
+              UID={ride.UID}
+              doj={ride.doj}
+              from={ride.from}
+              nop={ride.nop}
+              price={ride.price}
+              to={ride.to}
+              // Add a class to style expired rides
+              expired={new Date(ride.doj) < new Date()}
             />
-          ) : null
-        )}
+          ))
+        ) : allRides.length === 0 ? (
+          <p>Oops! Looks like you have not published any rides.</p>
+        ) : null}
       </Box>
       <br />
       <br />

@@ -9,18 +9,33 @@ const MyRides = () => {
   const [allRides, setAllRides] = useState([]);
   const UID = localStorage.getItem('UID');
   const [loading, setLoad] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    try {
-      setLoad(true);
-      axios.get(`http://localhost:8000/user/${UID}/rides`).then(response => {
+    const fetchData = async () => {
+      try {
+        setLoad(true);
+        const response = await axios.get(
+          `http://localhost:8000/user/${UID}/rides`
+        );
         setLoad(false);
-        setAllRides(response.data);
-      });
-    } catch (err) {
-      console.log(err);
-    }
-  }, []);
+
+        // Vérifiez si la réponse contient des données
+        if (response.data) {
+          setAllRides(response.data);
+        } else {
+          // Si la réponse ne contient pas de données
+          setAllRides([]);
+        }
+      } catch (error) {
+        setLoad(false);
+        setError("Une erreur s'est produite lors du chargement des trajets.");
+        console.error(error);
+      }
+    };
+
+    fetchData();
+  }, [UID]);
 
   return (
     <ChakraProvider theme={theme}>
@@ -33,21 +48,19 @@ const MyRides = () => {
 
         {loading === true ? <LoadingCard /> : null}
 
-        {allRides.map(res => {
-          return (
+        {Array.isArray(allRides) && allRides.length > 0 ? (
+          allRides.map((ride, index) => (
             <MyRide
-              UID={parseInt(localStorage.getItem('UID'))}
-              key={res.id}
-              from={res.from_location}
-              to={res.to_location}
-              doj={res.doj}
-              price={res.price}
-              rideID={res.id}
-              nop={res.passenger_count}
+              key={index}
+              UID={ride.UID}
+              doj={ride.doj}
+              from={ride.from}
+              nop={ride.nop}
+              price={ride.price}
+              to={ride.to}
             />
-          );
-        })}
-        {allRides.length === 0 ? (
+          ))
+        ) : allRides.length === 0 ? (
           <p>Oops! Looks like you have not published any rides.</p>
         ) : null}
       </Box>
