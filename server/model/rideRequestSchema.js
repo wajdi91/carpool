@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const rideRequestSchema = new mongoose.Schema({
-  userName: {
+  demanderUID: {
     type: String,
     required: true,
   },
@@ -11,6 +11,10 @@ const rideRequestSchema = new mongoose.Schema({
   },
   publisherUID: {
     type: String,
+    required: true,
+  },
+  demanderUID: {
+    type: String, // Assurez-vous que le type correspond à l'UID dans votre application
     required: true,
   },
   // Autres champs de modèle si nécessaire

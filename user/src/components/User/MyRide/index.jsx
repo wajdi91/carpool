@@ -23,7 +23,7 @@ export const MyRide = ({ from, to, nop, price, rideID, doj, UID }) => {
   var color = 'white';
   var statusColor = 'orange.200';
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [userName, setUserName] = useState('');
+  const [demanderUID, setDemanderUID] = useState('');
   const [userPhone, setUserPhone] = useState('');
   const navigate = useNavigate();
 
@@ -31,11 +31,11 @@ export const MyRide = ({ from, to, nop, price, rideID, doj, UID }) => {
     onOpen();
   };
   const handleSubmit = async () => {
-    console.log('Submitting data:', userName, userPhone, UID);
+    console.log('Submitting data:', demanderUID, userPhone, UID);
 
     try {
       // Vérifiez si les champs sont vides
-      if (!userName || !userPhone) {
+      if (!demanderUID || !userPhone) {
         // Affichez un message d'erreur si les champs sont vides
         alert('Please enter your name and phone number.');
         return;
@@ -45,7 +45,7 @@ export const MyRide = ({ from, to, nop, price, rideID, doj, UID }) => {
       const response = await axios.post(
         'http://localhost:8000/user/submit-request',
         {
-          userName,
+          demanderUID,
           userPhone,
           publisherUID: UID, // Inclure l'UID du déposant de la course
           // Autres données que vous pourriez vouloir envoyer
@@ -138,11 +138,11 @@ export const MyRide = ({ from, to, nop, price, rideID, doj, UID }) => {
             <ModalHeader>Enter Your Details</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-              <Text mb={4}>Enter your name and phone number:</Text>
+              <Text mb={4}>Enter your UID and phone number:</Text>
               <Input
-                placeholder="Your Name"
-                value={userName}
-                onChange={e => setUserName(e.target.value)}
+                placeholder="Your UID"
+                value={demanderUID}
+                onChange={e => setDemanderUID(e.target.value)}
                 mb={4}
               />
               <Input

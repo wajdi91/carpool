@@ -291,15 +291,15 @@ router.post(
 );
 // POST: Créer une nouvelle demande de trajet
 router.post('/user/submit-request', async (req, res) => {
-  const { userName, userPhone, publisherUID } = req.body;
-  console.log('Received data:', req.body);
+  const { demanderUID, userPhone, publisherUID } = req.body;
 
   try {
     // Créer une nouvelle demande de trajet
     const newRideRequest = new RideRequest({
-      userName,
+      demanderUID,
       userPhone,
       publisherUID,
+      
       // Autres champs de modèle si nécessaire
     });
 
@@ -313,5 +313,17 @@ router.post('/user/submit-request', async (req, res) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 });
+router.get('/user/requests/:uid', async (req, res) => {
+  const { uid } = req.params;
 
+  try {
+    // Récupérer les demandes de trajet en fonction de l'UID
+    const userRequests = await RideRequest.find({ demanderUID: uid });
+
+    res.status(200).json(userRequests);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
 export default router;

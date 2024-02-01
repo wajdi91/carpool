@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import Navbar from '../../components/User/Navbar';
-import { Box, Text, ChakraProvider, theme } from '@chakra-ui/react';
+import { Box, Text, ChakraProvider, theme, VStack } from '@chakra-ui/react';
 import RideCard from '../../components/User/MyRequests';
 import LoadingCard from '../../components/layouts/LoadingCard';
 
@@ -13,16 +13,14 @@ const MyRequestRides = () => {
   useEffect(() => {
     try {
       setLoad(true);
-      axios
-        .get(`http://localhost:8000/requests?requestee_id=${UID}`)
-        .then(response => {
-          setLoad(false);
-          setMyRequests(response.data);
-        });
+      axios.get(`http://localhost:8000/user/requests/${UID}`).then(response => {
+        setLoad(false);
+        setMyRequests(response.data);
+      });
     } catch (err) {
       console.log(err);
     }
-  }, []);
+  }, [UID]);
 
   return (
     <ChakraProvider theme={theme}>
@@ -33,18 +31,23 @@ const MyRequestRides = () => {
           My Requests Status
         </Text>
         {loading === true ? <LoadingCard /> : null}
-        {myRequests.map(res => (
-          <RideCard
-            key={`${res.ride_id}-${res.publisher_id}`}
-            uid={parseInt(localStorage.getItem('UID'))}
-            rideID={res.ride_id}
-            pid={res.publisher_id}
-            requestStatus={res.request_status}
-          />
-        ))}
-        {myRequests.length === 0 ? (
-          <p>You have not requested for any rides.</p>
-        ) : null}
+        {myRequests.length > 0 ? (
+          <Box>
+            {/* Affichez les données comme vous le souhaitez ici */}
+            {myRequests.map((res, index) => (
+              <div key={index}>
+                {/* Affichez les détails de chaque demande ici */}
+                <p>{`Ride ID: ${res.demanderUID}`}</p>
+                <p>{`Publisher ID: ${res.publisherUID}`}</p>
+                <p>{`Request Status: ${res.userPhone}`}</p>
+                {/* Ajoutez d'autres détails si nécessaire */}
+                <hr />
+              </div>
+            ))}
+          </Box>
+        ) : (
+          <Text>No requests found.</Text>
+        )}
       </Box>
       <br />
       <br />
