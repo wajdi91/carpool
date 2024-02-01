@@ -25,7 +25,7 @@ const ReqCard = props => {
   const riderType = 'Student';
   const status = props.status.toLowerCase(); //pending , accepted, rejected
   var statusColor = 'grey.200';
-  if (status == 'accepted') statusColor = 'green.400';
+  if (status === 'accepted') statusColor = 'green.400';
   else statusColor = 'red.500';
 
   const acceptReq = async () => {
@@ -116,7 +116,7 @@ const ReqCard = props => {
             <Text fontSize={'2xl'}>{riderType}</Text>
           </Box>
           <Box w="100%" textAlign={'center'}>
-            {status == 'pending' ? (
+            {status === 'pending' ? (
               <Box>
                 <Button id={'acpt_btn'} onClick={acceptReq}>
                   Accept
@@ -131,7 +131,7 @@ const ReqCard = props => {
                   {status.toUpperCase()}
                   <br />
                 </Text>
-                {status == 'accepted' ? (
+                {status === 'accepted' ? (
                   <Box mt={'10px'}>
                     <Button onClick={callNum}>Call</Button>
                     <Button onClick={callEmail} ml={'1rem'}>

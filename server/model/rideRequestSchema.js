@@ -1,19 +1,22 @@
 import mongoose from "mongoose";
+
 const rideRequestSchema = new mongoose.Schema({
-  RideID: {
+  userName: {
     type: String,
     required: true,
   },
-  RequestID: {
+  userPhone: {
     type: String,
     required: true,
   },
-  RequestName:{
+  publisherUID: {
     type: String,
-    required: true
-  }
+    required: true,
+  },
+  // Autres champs de modèle si nécessaire
 });
 
-const RideRequest = mongoose.model("RIDEREQUEST", rideRequestSchema);
+const RideRequest = mongoose.model('RideRequest', rideRequestSchema);
 
-export default RideRequest;
+export default  RideRequest;
+

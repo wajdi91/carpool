@@ -289,5 +289,29 @@ router.post(
     }
   }
 );
+// POST: Créer une nouvelle demande de trajet
+router.post('/user/submit-request', async (req, res) => {
+  const { userName, userPhone, publisherUID } = req.body;
+  console.log('Received data:', req.body);
+
+  try {
+    // Créer une nouvelle demande de trajet
+    const newRideRequest = new RideRequest({
+      userName,
+      userPhone,
+      publisherUID,
+      // Autres champs de modèle si nécessaire
+    });
+
+    // Sauvegarder la demande de trajet dans la base de données
+    const savedRideRequest = await newRideRequest.save();
+
+    // Vous pouvez également effectuer d'autres actions ici, comme envoyer une réponse JSON
+    res.status(201).json(savedRideRequest);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
 
 export default router;

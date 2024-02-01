@@ -33,7 +33,7 @@ function App() {
                     zIndex: -1,
                   }}
                 >
-                  Manipal University Jaipur
+                  ITeam University Car pool By Wass
                 </Text>
                 <br />{' '}
                 <Text color={'orange.400'} as={'span'}>
@@ -41,7 +41,7 @@ function App() {
                 </Text>{' '}
               </Heading>
               <Text fontSize={{ base: 'md', lg: 'lg' }} color={'gray.500'}>
-                This platform is an exclusive resource for the people of MUJ. 
+                This platform is an exclusive resource for the people of Iteam.
                 It provides an easy and accessible way to pool vehicles and get
                 co-passengers for the go.
               </Text>
@@ -68,18 +68,16 @@ function App() {
             <Image
               alt={'MUJ-IMAGE'}
               objectFit={'cover'}
-//               h="100vh"
+              //               h="100vh"
               // w="50vw"
-            h={['70vh', '80vh', '100vh', '100vh']}
-            width={[
-              '100vw', // 0-30em
-              '100vw', // 30em-48em
-              '50vw', // 48em-62em
-              '50vw', // 62em+
-            ]}
-              src={
-                "https://mujslcm.jaipur.manipal.edu:122/keen/themes/keen/theme/demo1/dist/assets/media/misc/bg_1.jpg"
-              }
+              h={['70vh', '80vh', '100vh', '100vh']}
+              width={[
+                '100vw', // 0-30em
+                '100vw', // 30em-48em
+                '50vw', // 48em-62em
+                '50vw', // 62em+
+              ]}
+              src={''}
             />
           </Flex>
         </Stack>
