@@ -26,6 +26,7 @@ export const MyRide = ({ from, to, nop, price, rideID, doj, UID }) => {
   const [demanderUID, setDemanderUID] = useState('');
   const [userPhone, setUserPhone] = useState('');
   const navigate = useNavigate();
+  const [rideRequests, setRideRequests] = useState([]);
 
   const redirectReq = async () => {
     onOpen();
@@ -48,6 +49,7 @@ export const MyRide = ({ from, to, nop, price, rideID, doj, UID }) => {
           demanderUID,
           userPhone,
           publisherUID: UID, // Inclure l'UID du déposant de la course
+          status: 'pending',
           // Autres données que vous pourriez vouloir envoyer
         }
       );
@@ -70,7 +72,33 @@ export const MyRide = ({ from, to, nop, price, rideID, doj, UID }) => {
       alert('An error occurred while submitting data.');
     }
   };
+  const fetchRideRequests = async () => {
+    try {
+      console.log('Fetching Ride Requests...'); // Ajoutez ce journal pour déboguer
+      const response = await axios.get(
+        `http://localhost:8000/user/ride-requests/${UID}`
+      );
+      console.log('Ride Requests Response:', response.data); // Ajoutez ce journal pour déboguer
 
+      setRideRequests(response.data);
+    } catch (error) {
+      console.error('Error fetching ride requests:', error.message);
+    }
+  };
+
+  const respondToRequest = async (requestId, response) => {
+    try {
+      await axios.post('http://localhost:8000/user/ride-requests/respond', {
+        requestId,
+        response,
+      });
+
+      // Mettez à jour l'état des demandes après avoir répondu
+      fetchRideRequests();
+    } catch (error) {
+      console.error('Error responding to request:', error.message);
+    }
+  };
   return (
     <FadeInUp>
       <Card
@@ -123,7 +151,7 @@ export const MyRide = ({ from, to, nop, price, rideID, doj, UID }) => {
           <Box align="center">
             <b>Price</b>
             <br />
-            Rs. {price}
+            TND {price}
           </Box>
           <Box align="center">
             <Button onClick={redirectReq}>Request Now!!</Button>
@@ -131,6 +159,7 @@ export const MyRide = ({ from, to, nop, price, rideID, doj, UID }) => {
         </SimpleGrid>
         <br />
         <br />
+
         {/* Modal pour la saisie du numéro de téléphone et du nom */}
         <Modal isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
@@ -161,6 +190,23 @@ export const MyRide = ({ from, to, nop, price, rideID, doj, UID }) => {
           </ModalContent>
         </Modal>
       </Card>
+      <Box>
+        <Text fontWeight={'bold'} fontSize="xl" mt="4">
+          Ride Requests:
+        </Text>
+        {rideRequests.map(request => (
+          <Box key={request._id} mb="2">
+            <Text>{`Request from: ${request.demanderUID}`}</Text>
+            <Text>{`Phone Number: ${request.userPhone}`}</Text>
+            <Button onClick={() => respondToRequest(request._id, 'accept')}>
+              Accept
+            </Button>
+            <Button onClick={() => respondToRequest(request._id, 'reject')}>
+              Reject
+            </Button>
+          </Box>
+        ))}
+      </Box>
     </FadeInUp>
   );
 };

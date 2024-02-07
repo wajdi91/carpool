@@ -299,7 +299,7 @@ router.post('/user/submit-request', async (req, res) => {
       demanderUID,
       userPhone,
       publisherUID,
-      
+      status: 'pending',
       // Autres champs de modèle si nécessaire
     });
 
@@ -321,6 +321,50 @@ router.get('/user/requests/:uid', async (req, res) => {
     const userRequests = await RideRequest.find({ demanderUID: uid });
 
     res.status(200).json(userRequests);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+// Route pour récupérer les demandes pour un certain déposeur de ride
+router.get('/user/ride-requests/:UID', async (req, res) => {
+  const { UID } = req.params;
+
+  try {
+    const rideRequests = await RideRequest.find({ UID:UID });
+    res.status(200).json(rideRequests);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+// Route pour accepter ou refuser une demande
+router.post('/user/ride-requests/respond', async (req, res) => {
+  const { requestId, response } = req.body;
+
+  try {
+    let updatedRequest;
+
+    if (response === 'accept') {
+      // Mettez à jour la demande avec le statut 'accepté'
+      updatedRequest = await RideRequest.findByIdAndUpdate(
+        requestId,
+        { status: 'accepted' },
+        { new: true }
+      );
+    } else if (response === 'reject') {
+      // Mettez à jour la demande avec le statut 'refusé'
+      updatedRequest = await RideRequest.findByIdAndUpdate(
+        requestId,
+        { status: 'rejected' },
+        { new: true }
+      );
+    } else {
+      return res.status(400).json({ message: 'Invalid response' });
+    }
+
+    res.status(200).json(updatedRequest);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal Server Error' });

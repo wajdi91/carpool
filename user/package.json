@@ -1,7 +1,7 @@
 {
   "name": "user",
   "version": "0.1.0",
-  "proxy": "https://muj-travel-buddy-backend-production.up.railway.app",
+  "proxy": "#",
   "private": true,
   "dependencies": {
     "@chakra-ui/icons": "^2.0.2",

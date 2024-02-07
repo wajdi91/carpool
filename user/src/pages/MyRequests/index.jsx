@@ -40,7 +40,7 @@ const MyRequestRides = () => {
                 <p>{`Ride ID: ${res.demanderUID}`}</p>
                 <p>{`Publisher ID: ${res.publisherUID}`}</p>
                 <p>{`Request Status: ${res.userPhone}`}</p>
-                {/* Ajoutez d'autres détails si nécessaire */}
+                <p>{`Request Status: ${res.status}`}</p>
                 <hr />
               </div>
             ))}

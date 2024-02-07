@@ -64,12 +64,15 @@ export default function Footer() {
           justify={{ base: 'center', md: 'space-between' }}
           align={{ base: 'center', md: 'center' }}
         >
-          <Text>© 2023 Manipal University Jaipur. All rights reserved</Text>
+          <Text>© ITeam University Car pool By Wass. All rights reserved</Text>
           <Stack direction={'row'} spacing={6}>
-            <SocialButton label={'Gmail'} href={'mailto:srv.tanay@gmail.com'}>
+            <SocialButton
+              label={'Gmail'}
+              href={'mailto:wassim.abderrahim@gmail.com'}
+            >
               <FaGoogle />
             </SocialButton>
-            <SocialButton label={'GitHub'} href={'https://github.com/Ta5r/MUJCarPool'}>
+            <SocialButton label={'GitHub'} href={'https://github.com/wass1920'}>
               <FaGithub />
             </SocialButton>
           </Stack>

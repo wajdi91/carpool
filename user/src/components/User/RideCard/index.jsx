@@ -80,7 +80,7 @@ const RideCard = props => {
           <Box w="100%" textAlign={'center'}>
             <b>Price</b>
             <br />
-            Rs. {price}
+            TND {price}
           </Box>
           <Box w="100%" textAlign={'center'}>
             <Text fontSize={'lg'}>

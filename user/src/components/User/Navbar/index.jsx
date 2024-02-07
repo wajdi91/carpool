@@ -22,9 +22,9 @@ import { HamburgerIcon, CloseIcon, AddIcon } from '@chakra-ui/icons';
 import { useNavigate } from 'react-router-dom';
 import jwt from 'jwt-decode';
 
-var name="";
+var name = '';
 var x = localStorage.getItem('tokenID');
-if(x){
+if (x) {
   const user = jwt(x);
   name = user.fname + ' ' + user.lname;
   console.log(user);
@@ -61,7 +61,7 @@ export default function Navbar() {
           />
           <HStack spacing={8} alignItems={'center'}>
             <Box>
-              <Text fontWeight={'bold'}>Travel Buddy</Text>
+              <Text fontWeight={'bold'}>Iteam car pool</Text>
             </Box>
             <HStack
               as={'nav'}
@@ -94,9 +94,7 @@ export default function Navbar() {
               >
                 <Avatar
                   size={'sm'}
-                  src={
-                    'https://images.unsplash.com/photo-1565802527863-1353e4ebce91?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=712&q=80'
-                  }
+                  src={'https://avatars.githubusercontent.com/u/96189132?v=4'}
                 />
               </MenuButton>
               <MenuList>

@@ -17,6 +17,13 @@ const rideRequestSchema = new mongoose.Schema({
     type: String, // Assurez-vous que le type correspond à l'UID dans votre application
     required: true,
   },
+  status: {
+    type: String,
+    enum: ['pending', 'confirmed', 'cancelled'],
+    default: 'pending',
+  },
+  rideID: { type: mongoose.Schema.Types.ObjectId, ref: 'Ride' }, // Ajout de cette ligne
+
   // Autres champs de modèle si nécessaire
 });
 

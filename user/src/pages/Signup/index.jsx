@@ -61,7 +61,6 @@ export default function Signup() {
 
     try {
       let dat = await axios.post('http://localhost:8000/user/register', {
-        //       let dat = await axios.post('https://muj-travel-buddy-backend-production.up.railway.app/users/register', {
         UID: AID,
         user_type: userType,
         fname: name,
@@ -173,7 +172,7 @@ export default function Signup() {
                   <FormControl id="email">
                     <FormLabel>Email</FormLabel>
                     <Input
-                      placeholder={'email@muj.manipal.edu'}
+                      placeholder={'wassim.abderrahim@gmail.com'}
                       type="email"
                       id="email"
                       value={email}

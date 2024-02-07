@@ -66,7 +66,7 @@ function App() {
           </Flex>
           <Flex flex={1}>
             <Image
-              alt={'MUJ-IMAGE'}
+              alt={'WASS-IMAGE'}
               objectFit={'cover'}
               //               h="100vh"
               // w="50vw"
