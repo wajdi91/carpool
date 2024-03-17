@@ -61,7 +61,7 @@ export default function Navbar() {
           />
           <HStack spacing={8} alignItems={'center'}>
             <Box>
-              <Text fontWeight={'bold'}>Iteam car pool</Text>
+              <Text fontWeight={'bold'}>Wassalni</Text>
             </Box>
             <HStack
               as={'nav'}
@@ -94,7 +94,7 @@ export default function Navbar() {
               >
                 <Avatar
                   size={'sm'}
-                  src={'https://avatars.githubusercontent.com/u/96189132?v=4'}
+                  src={''}
                 />
               </MenuButton>
               <MenuList>

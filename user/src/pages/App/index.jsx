@@ -33,7 +33,7 @@ function App() {
                     zIndex: -1,
                   }}
                 >
-                  ITeam University Car pool By Wass
+                  ITeam University wassalni 
                 </Text>
                 <br />{' '}
                 <Text color={'orange.400'} as={'span'}>
@@ -72,12 +72,12 @@ function App() {
               // w="50vw"
               h={['70vh', '80vh', '100vh', '100vh']}
               width={[
-                '100vw', // 0-30em
-                '100vw', // 30em-48em
+                '50vw', // 0-30em
+                '50vw', // 30em-48em
                 '50vw', // 48em-62em
                 '50vw', // 62em+
               ]}
-              src={''}
+              src={'wassalni.png'}
             />
           </Flex>
         </Stack>
